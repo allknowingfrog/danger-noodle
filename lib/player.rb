@@ -18,7 +18,7 @@ class Player
       options = valid_moves(height, width, bodies, head)
       preferences = favorite_moves(height, width, head)
 
-      (options & preferences).first
+      (preferences & options).first
     end
 
     private
@@ -44,8 +44,8 @@ class Player
     end
 
     def favorite_moves(height, width, head)
-      target_x = width / 2
-      target_y = height / 2
+      target_x = width / 2.0
+      target_y = height / 2.0
 
       xx = target_x - head["x"]
       yy = target_y - head["y"]
