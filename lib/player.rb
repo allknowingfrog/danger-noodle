@@ -15,7 +15,10 @@ class Player
 
       head = data["you"]["head"]
 
-      valid_moves(height, width, bodies, head).sample
+      options = valid_moves(height, width, bodies, head)
+      preferences = favorite_moves(height, width, head)
+
+      (options & preferences).first
     end
 
     private
@@ -38,6 +41,23 @@ class Player
 
         dir
       end.compact
+    end
+
+    def favorite_moves(height, width, head)
+      target_x = width / 2
+      target_y = height / 2
+
+      xx = target_x - head["x"]
+      yy = target_y - head["y"]
+
+      x_over_y = xx.abs > yy.abs
+      left_over_right = xx < 0
+      down_over_up = yy < 0
+
+      x_moves = left_over_right ? ["left", "right"] : ["right", "left"]
+      y_moves = down_over_up ? ["down", "up"] : ["up", "down"]
+
+      x_over_y ? [x_moves.first, y_moves.first, y_moves.last, x_moves.last] : [y_moves.first, x_moves.first, x_moves.last, y_moves.last]
     end
   end
 end
