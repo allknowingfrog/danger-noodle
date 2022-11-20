@@ -1,4 +1,4 @@
-require "dotenv/load"
+require "dotenv/load" if ENV["DOTENV"]
 require "amygdala"
 
 require "./lib/player"
