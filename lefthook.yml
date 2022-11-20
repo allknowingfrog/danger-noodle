@@ -1,0 +1,5 @@
+pre-commit:
+  parallel: true
+  commands:
+    standard:
+      run: bin/standardrb

@@ -1,13 +1,14 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+ruby File.read(".ruby-version").chomp
 
-gem 'sinatra'
+gem "amygdala", "~> 0.1.0"
 
 group :development, :test do
-  gem 'dotenv'
+  gem "dotenv"
+
+  gem "lefthook"
+  gem "standard"
 
   gem "rspec"
 
