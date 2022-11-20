@@ -1,63 +1,37 @@
-class Player
-  DIRS = {
-    "up" => {"x" => 0, "y" => 1},
-    "down" => {"x" => 0, "y" => -1},
-    "left" => {"x" => -1, "y" => 0},
-    "right" => {"x" => 1, "y" => 0}
-  }
+require_relative "./board"
+require_relative "./snake"
+require_relative "./move"
 
+class Player
   class << self
     def move(data)
-      height = data["board"]["height"]
-      width = data["board"]["height"]
+      board = Board.parse(data["board"])
 
-      bodies = data["board"]["snakes"].flat_map { |s| s["body"] }
+      head = Snake.parse(data["you"]).head
 
-      head = data["you"]["head"]
-
-      options = valid_moves(height, width, bodies, head)
-      preferences = favorite_moves(height, width, head)
-
-      (preferences & options).first
+      Move.permutate(head)
+        .select { |move| board.passable?(move.location) }
+        .min_by { |move| move.location.distance(board.center) }
+        .dir
     end
 
-    private
+    def move_towards(board, location, target)
+      moves = []
 
-    def valid_moves(height, width, bodies, head)
-      DIRS.map do |dir, move|
-        candidate = head.dup
+      edges = Move.permutate(location, target)
+        .select { |move| board.passable?(move.location) }
 
-        candidate["x"] += move["x"]
-        candidate["y"] += move["y"]
+      while edges.any?
+        target = edges.find { |e| e.location == target }
 
-        next if candidate["x"] < 0
-        next if candidate["x"] >= width
-        next if candidate["y"] < 0
-        next if candidate["y"] >= height
+        break if target
 
-        next if bodies.any? do |body|
-          candidate["x"] == body["x"] && candidate["y"] == body["y"]
-        end
+        moves += edges
 
-        dir
-      end.compact
-    end
-
-    def favorite_moves(height, width, head)
-      target_x = width / 2.0
-      target_y = height / 2.0
-
-      xx = target_x - head["x"]
-      yy = target_y - head["y"]
-
-      x_over_y = xx.abs > yy.abs
-      left_over_right = xx < 0
-      down_over_up = yy < 0
-
-      x_moves = left_over_right ? ["left", "right"] : ["right", "left"]
-      y_moves = down_over_up ? ["down", "up"] : ["up", "down"]
-
-      x_over_y ? [x_moves.first, y_moves.first, y_moves.last, x_moves.last] : [y_moves.first, x_moves.first, x_moves.last, y_moves.last]
+        edges = moves.min_by(&:cost).expand(target, moves)
+          .reject { |move| moves.include?(move) }
+          .select { |move| board.passable?(move.location) }
+      end
     end
   end
 end
