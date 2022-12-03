@@ -16,4 +16,4 @@ group :development, :test do
   gem "guard-rspec", require: false
 end
 
-gem "thin", "~> 1.8"
+gem "thin"
