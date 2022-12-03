@@ -14,6 +14,13 @@ class Location
     (location.x - x).abs + (location.y - y).abs
   end
 
+  def pythagorean_distance(location)
+    a = (location.x - x).abs
+    b = (location.y - y).abs
+
+    Math.sqrt(a**2 + b**2)
+  end
+
   def ==(other)
     other.x == x && other.y == y
   end

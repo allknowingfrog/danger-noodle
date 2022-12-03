@@ -11,7 +11,7 @@ class Player
 
       Move.permutate(head)
         .select { |move| board.passable?(move.location) }
-        .min_by { |move| move.location.distance(board.center) }
+        .min_by { |move| move.location.pythagorean_distance(board.center) }
         .dir
     end
 
