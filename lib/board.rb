@@ -38,6 +38,13 @@ class Board
     location.x >= 0 && location.x < width && location.y >= 0 && location.y < height
   end
 
+  def safe?(location)
+    # one of these snakes is me; two or more could be a problem
+    snakes.one? do |snake|
+      location.distance(snake.head) == 1
+    end
+  end
+
   private
 
   def obstacles
