@@ -45,6 +45,10 @@ class Board
     end
   end
 
+  def distance_to_food(location)
+    food.map { |f| location.distance(f) }.min
+  end
+
   private
 
   def obstacles

@@ -101,5 +101,13 @@ RSpec.describe Player do
     subject { Player.move(data) }
 
     it { is_expected.to eq("up") }
+
+    describe "with low health" do
+      before do
+        data["you"]["health"] = 50
+      end
+
+      it { is_expected.to eq("up") }
+    end
   end
 end

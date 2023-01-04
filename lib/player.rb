@@ -7,12 +7,19 @@ class Player
     def move(data)
       board = Board.parse(data["board"])
 
-      head = Snake.parse(data["you"]).head
+      me = Snake.parse(data["you"])
+      head = me.head
 
       Move.permutate(head)
         .select { |move| board.passable?(move.location) }
         .select { |move| board.safe?(move.location) }
-        .min_by { |move| move.location.pythagorean_distance(board.center) }
+        .min_by do |move|
+          if me.health > 50
+            move.location.pythagorean_distance(board.center)
+          else
+            board.distance_to_food(move.location)
+          end
+        end
         .dir
     end
 
