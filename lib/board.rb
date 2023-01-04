@@ -47,9 +47,11 @@ class Board
   end
 
   def untrapped?(location)
-    Move.permutate(location).any? do |move|
-      passable?(move.location)
-    end
+    Move.permutate(location)
+      .select { |m| passable?(m.location) }
+      .any? do |move|
+        Move.permutate(move.location).count { |m| passable?(m.location) } > 1
+      end
   end
 
   def distance_to_food(location)
