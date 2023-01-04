@@ -44,7 +44,7 @@ class Scenario
           "timeout" => 500
         },
         "turn" => 14,
-        "board" => generate_board(snakes: snakes.sort.to_h, health: health, food: food)
+        "board" => generate_board(snakes: snakes.sort.to_h, health: health, food: food, size: rows.count)
       }.tap do |data|
         data["you"] = data["board"]["snakes"].first
       end
@@ -52,7 +52,7 @@ class Scenario
 
     private
 
-    def generate_board(snakes: nil, health: {}, food: nil)
+    def generate_board(snakes: nil, health: {}, food: nil, size: 11)
       food ||= [
         {"x" => 5, "y" => 5},
         {"x" => 9, "y" => 0},
@@ -60,8 +60,8 @@ class Scenario
       ]
 
       {
-        "height" => 11,
-        "width" => 11,
+        "height" => size,
+        "width" => size,
         "food" => food,
         "hazards" => [],
         "snakes" => []

@@ -12,7 +12,7 @@ class Player
 
       Move.permutate(head)
         .select { |move| board.passable?(move.location) }
-        .select { |move| board.safe?(move.location) }
+        .select { |move| board.safe?(move.location, me.length) }
         .min_by do |move|
           if me.health > 50
             move.location.pythagorean_distance(board.center)
