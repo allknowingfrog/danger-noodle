@@ -1,6 +1,5 @@
 require "./lib/player"
 require "./spec/helpers/scenario"
-require "json"
 
 RSpec.describe Player do
   describe "::move" do
