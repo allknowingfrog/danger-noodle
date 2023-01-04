@@ -84,7 +84,7 @@ class Scenario
           board["snakes"] << {
             "id" => "snake-508e96a#{name.downcase}-94ad-11ea-bb37",
             "name" => "Snake #{name}",
-            "health" => health[name] || 50,
+            "health" => health[name] || 75,
             "body" => body,
             "latency" => "123",
             "head" => body.first,

@@ -1,4 +1,5 @@
 require_relative "./location"
+require_relative "./move"
 require_relative "./snake"
 
 class Board
@@ -42,6 +43,12 @@ class Board
     # one of these snakes is me; two or more could be a problem
     snakes.one? do |snake|
       location.distance(snake.head) == 1 && snake.length >= length
+    end
+  end
+
+  def untrapped?(location)
+    Move.permutate(location).any? do |move|
+      passable?(move.location)
     end
   end
 
