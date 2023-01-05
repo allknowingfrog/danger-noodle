@@ -38,18 +38,21 @@ class Board
     location.x >= 0 && location.x < width && location.y >= 0 && location.y < height
   end
 
-  def safe?(location, length)
-    # one of these snakes is me; two or more could be a problem
-    snakes.one? do |snake|
-      location.distance(snake.head) == 1 && snake.length >= length
+  def other_snakes(me)
+    snakes.reject { |s| s.head == me.head }
+  end
+
+  def safe?(location, me)
+    other_snakes(me).none? do |snake|
+      location.distance(snake.head) == 1 && snake.length >= me.length
     end
   end
 
-  def untrapped?(location)
+  def untrapped?(location, me)
     location.neighbors
       .select { |n| passable?(n) }
       .any? do |neighbor|
-        neighbor.neighbors.count { |n| passable?(n) } > 1
+        neighbor.neighbors.count { |n| passable?(n) && safe?(n, me) } > 1
       end
   end
 

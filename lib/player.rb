@@ -12,8 +12,8 @@ class Player
 
       target = head.neighbors
         .select { |n| board.passable?(n) }
-        .select { |n| board.safe?(n, me.length) }
-        .select { |n| board.untrapped?(n) }
+        .select { |n| board.safe?(n, me) }
+        .select { |n| board.untrapped?(n, me) }
         .min_by do |neighbor|
           if me.health > 50
             neighbor.pythagorean_distance(board.center)
