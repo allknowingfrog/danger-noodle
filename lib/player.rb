@@ -10,19 +10,19 @@ class Player
       me = Snake.parse(data["you"])
       head = me.head
 
-      targets = head.neighbors
+      options = head.neighbors
         .select { |n| board.passable?(n) }
         .select { |n| board.safe?(n, me) }
 
-      safe_targets = targets.select { |n| board.untrapped?(n, me) }
+      safe_options = options.select { |o| board.untrapped?(o, me) }
 
-      targets = safe_targets if safe_targets.any?
+      options = safe_options if safe_options.any?
 
-      target = targets.min_by do |neighbor|
+      target = options.min_by do |option|
         if me.health > 50
-          neighbor.pythagorean_distance(board.center)
+          option.pythagorean_distance(board.center)
         else
-          board.distance_to_food(neighbor)
+          board.distance_to_food(option)
         end
       end
 
