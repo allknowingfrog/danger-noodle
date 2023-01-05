@@ -1,6 +1,6 @@
 require_relative "./board"
 require_relative "./snake"
-require_relative "./move"
+require_relative "./location"
 
 class Player
   class << self
@@ -10,37 +10,19 @@ class Player
       me = Snake.parse(data["you"])
       head = me.head
 
-      Move.permutate(head)
-        .select { |move| board.passable?(move.location) }
-        .select { |move| board.safe?(move.location, me.length) }
-        .select { |move| board.untrapped?(move.location) }
-        .min_by do |move|
+      target = head.neighbors
+        .select { |n| board.passable?(n) }
+        .select { |n| board.safe?(n, me.length) }
+        .select { |n| board.untrapped?(n) }
+        .min_by do |neighbor|
           if me.health > 50
-            move.location.pythagorean_distance(board.center)
+            neighbor.pythagorean_distance(board.center)
           else
-            board.distance_to_food(move.location)
+            board.distance_to_food(neighbor)
           end
         end
-        .dir
-    end
 
-    def move_towards(board, location, target)
-      moves = []
-
-      edges = Move.permutate(location, target)
-        .select { |move| board.passable?(move.location) }
-
-      while edges.any?
-        target = edges.find { |e| e.location == target }
-
-        break if target
-
-        moves += edges
-
-        edges = moves.min_by(&:cost).expand(target, moves)
-          .reject { |move| moves.include?(move) }
-          .select { |move| board.passable?(move.location) }
-      end
+      head.dir(target)
     end
   end
 end

@@ -1,5 +1,4 @@
 require_relative "./location"
-require_relative "./move"
 require_relative "./snake"
 
 class Board
@@ -47,10 +46,10 @@ class Board
   end
 
   def untrapped?(location)
-    Move.permutate(location)
-      .select { |m| passable?(m.location) }
-      .any? do |move|
-        Move.permutate(move.location).count { |m| passable?(m.location) } > 1
+    location.neighbors
+      .select { |n| passable?(n) }
+      .any? do |neighbor|
+        neighbor.neighbors.count { |n| passable?(n) } > 1
       end
   end
 
