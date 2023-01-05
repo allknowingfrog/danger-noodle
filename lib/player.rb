@@ -16,7 +16,9 @@ class Player
 
       untrapped_options = safe_options.select { |o| board.untrapped?(o, me) }
 
-      target = [untrapped_options, safe_options, options]
+      amazing_options = untrapped_options.select { |o| board.safe_diagonals?(o, me) }
+
+      target = [amazing_options, untrapped_options, safe_options, options]
         .find(&:any?)
         .min_by do |option|
           if me.health > 50

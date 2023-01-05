@@ -48,6 +48,12 @@ class Board
     end
   end
 
+  def safe_diagonals?(location, me)
+    location.diagonals
+      .select { |d| passable?(d) }
+      .all? { |d| safe?(d, me) }
+  end
+
   def untrapped?(location, me)
     location.neighbors
       .select { |n| passable?(n) }

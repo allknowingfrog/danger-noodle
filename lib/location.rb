@@ -6,6 +6,8 @@ class Location
     "left" => [-1, 0]
   }
 
+  DIAGONALS = [1, 1, -1, -1].permutation(2).uniq
+
   attr_reader :x, :y
 
   def initialize(x:, y:)
@@ -18,7 +20,15 @@ class Location
   end
 
   def neighbors
-    DIRS.values.map do |dx, dy|
+    expand(DIRS.values)
+  end
+
+  def diagonals
+    expand(DIAGONALS)
+  end
+
+  def expand(moves)
+    moves.map do |dx, dy|
       self.class.new(x: x + dx, y: y + dy)
     end
   end
