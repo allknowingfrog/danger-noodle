@@ -25,7 +25,7 @@ RSpec.describe Player do
       it { is_expected.to eq("right") }
     end
 
-    describe "with multiple safe option" do
+    describe "with one most-open option" do
       let(:data) do
         Scenario.generate(<<~TXT)
           ...........
@@ -42,7 +42,7 @@ RSpec.describe Player do
         TXT
       end
 
-      it { is_expected.to eq("up") }
+      it { is_expected.to eq("right") }
     end
 
     describe "with multiple safe options" do
@@ -51,9 +51,6 @@ RSpec.describe Player do
       let(:data) do
         Scenario.generate(<<~TXT, health: {"A" => health})
           ...........
-          ...........
-          ...........
-          ...........
           ..*........
           .....*.....
           .....B.....
@@ -61,6 +58,9 @@ RSpec.describe Player do
           ......b....
           Aaa........
           .....*.....
+          ...........
+          ...........
+          ...........
         TXT
       end
 
@@ -90,7 +90,7 @@ RSpec.describe Player do
         TXT
       end
 
-      it { is_expected.to eq("up") }
+      it { is_expected.to eq("right") }
     end
 
     describe "with a double trapped space" do
@@ -151,6 +151,26 @@ RSpec.describe Player do
 
         it { is_expected.to eq("up") }
       end
+    end
+
+    describe "with a large, but potentially-trapped space" do
+      let(:data) do
+        Scenario.generate(<<~TXT)
+          ......aaaa.
+          .........a.
+          ........aa.
+          .......aa..
+          ....aaaa...
+          ....aaa....
+          ....aaa....
+          ....A...Bbb
+          bbbbbb.bbbb
+          .....b.bb..
+          .....bbbb..
+        TXT
+      end
+
+      it { is_expected.to eq("left") }
     end
 
     describe "with a potential incoming collision" do

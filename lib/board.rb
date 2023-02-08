@@ -62,6 +62,26 @@ class Board
       end
   end
 
+  def openness(location, me)
+    total = 0
+
+    visited = [location]
+    moves = [location]
+
+    [4, 2, 1].each do |score|
+      moves = moves.flat_map { |m| m.neighbors }.select { |m| passable?(m) && safe?(m, me) }
+
+      moves.each do |move|
+        next if visited.include?(move)
+
+        visited << move
+        total += score
+      end
+    end
+
+    total
+  end
+
   def distance_to_food(location)
     food.map { |f| location.distance(f) }.min
   end
