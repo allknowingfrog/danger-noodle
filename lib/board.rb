@@ -68,7 +68,8 @@ class Board
     visited = [location]
     moves = [location]
 
-    [4, 2, 1].each do |score|
+    # this was originally a doubling scale, but each level is currently 1
+    [2, 2, 2].each do |score|
       moves = moves.flat_map { |m| m.neighbors }.select { |m| passable?(m) && safe?(m, me) }
 
       moves.each do |move|
