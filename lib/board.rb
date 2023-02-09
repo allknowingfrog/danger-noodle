@@ -62,25 +62,40 @@ class Board
       end
   end
 
-  def openness(location, me)
-    total = 0
+  def flood_to?(location, me, distance)
+    blocked = []
+    blockers = other_snakes(me).map(&:head).flat_map(&:neighbors)
 
-    visited = [location]
-    moves = [location]
+    visited = []
+    visitors = [location]
 
-    # this was originally a doubling scale, but each level is currently 1
-    [2, 2, 2].each do |score|
-      moves = moves.flat_map { |m| m.neighbors }.select { |m| passable?(m) && safe?(m, me) }
+    limit = 0
 
-      moves.each do |move|
-        next if visited.include?(move)
+    distance.times do
+      blockers = blockers
+        .select { |b| passable?(b) }
+        .reject { |b| blocked.include?(b) }
+        .reject { |b| visited.include?(b) }
 
-        visited << move
-        total += score
-      end
+      blocked += blockers
+
+      visitors = visitors
+        .select { |v| passable?(v) }
+        .reject { |v| blocked.include?(v) }
+        .reject { |v| visited.include?(v) }
+
+      break unless visitors.any?
+
+      visited += visitors
+
+      limit += 1
+
+      blockers = blockers.flat_map(&:neighbors)
+
+      visitors = visitors.flat_map(&:neighbors)
     end
 
-    total
+    limit == distance
   end
 
   def distance_to_food(location)

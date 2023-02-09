@@ -18,7 +18,7 @@ class Player
 
       amazing_options = untrapped_options.select { |o| board.safe_diagonals?(o, me) }
 
-      spectacular_options = amazing_options.select { |o| board.openness(o, me) > 12 }
+      spectacular_options = amazing_options.select { |o| board.flood_to?(o, me, 5) }
 
       target = [spectacular_options, amazing_options, untrapped_options, safe_options, options]
         .find(&:any?)
