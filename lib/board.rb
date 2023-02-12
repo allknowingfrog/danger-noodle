@@ -62,7 +62,7 @@ class Board
       end
   end
 
-  def flood_to?(location, me, distance)
+  def flood_limit(location, me)
     blocked = []
     blockers = other_snakes(me).map(&:head).flat_map(&:neighbors)
 
@@ -71,7 +71,7 @@ class Board
 
     limit = 0
 
-    distance.times do
+    [height, width].max.times do
       blockers = blockers
         .select { |b| passable?(b) }
         .reject { |b| blocked.include?(b) }
@@ -95,7 +95,7 @@ class Board
       visitors = visitors.flat_map(&:neighbors)
     end
 
-    limit == distance
+    limit
   end
 
   def distance_to_food(location)
